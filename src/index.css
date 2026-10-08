@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme {
+  --color-studio-darkest: #06090c;
+  --color-studio-bg: #0a0f13;
+  --color-studio-surface: #101419;
+  --color-studio-surface-dim: #0d1115;
+  --color-studio-container: #181c21;
+  --color-studio-container-high: #20252b;
+  --color-studio-border: #262a30;
+  --color-studio-border-light: #363c45;
+  --color-studio-muted: #808793;
+  --color-studio-text: #e6edf3;
+
+  --color-accent-cyan: #00e5ff;
+  --color-accent-cyan-hover: #33ebff;
+  --color-accent-cyan-glow: rgba(0, 229, 255, 0.25);
+  --color-accent-green: #00e676;
+  --color-accent-amber: #ffb300;
+  --color-accent-red: #ff3b30;
+
+  --color-surface: #101419;
+  --color-surface-dim: #101419;
+  --color-surface-container-lowest: #0a0f13;
+  --color-surface-container-low: #181c21;
+  --color-surface-container: #1c2025;
+  --color-surface-container-high: #262a30;
+  --color-surface-container-highest: #31353b;
+  --color-surface-bright: #36393f;
+  --color-primary: #c3f5ff;
+  --color-primary-container: #00e5ff;
+  --color-on-primary-container: #00626e;
+  --color-primary-fixed: #9cf0ff;
+  --color-primary-fixed-dim: #00daf3;
+  --color-on-primary-fixed: #001f24;
+  --color-secondary: #7dffa2;
+  --color-secondary-container: #05e777;
+  --color-secondary-fixed: #62ff96;
+  --color-secondary-fixed-dim: #00e475;
+  --color-on-secondary: #003918;
+  --color-on-secondary-fixed: #00210b;
+  --color-tertiary: #e8ecff;
+  --color-tertiary-container: #bfd0ff;
+  --color-on-tertiary-container: #0053c0;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+  --color-outline: #849396;
+  --color-outline-variant: #3b494c;
+  --color-on-surface: #e0e2ea;
+  --color-on-surface-variant: #bac9cc;
+  --color-background: #101419;
+  --font-body-lg: "Geist", sans-serif;
+  --font-body-md: "Geist", sans-serif;
+  --font-body-sm: "Geist", sans-serif;
+  --font-label-lg: "JetBrains Mono", monospace;
+  --font-label-md: "JetBrains Mono", monospace;
+  --font-label-sm: "JetBrains Mono", monospace;
+
+  --shadow-cyan-glow: 0 0 16px -2px rgba(0, 229, 255, 0.35);
+  --shadow-playhead: 0 0 10px 1px rgba(0, 229, 255, 0.6);
+}
+
+@keyframes fadeLoop {
+  0%, 15% { opacity: 0; }
+  50%, 65% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes toggleB {
+  0%, 45% { opacity: 0; }
+  50%, 95% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes flashWhite {
+  0%, 40% { opacity: 0; }
+  48%, 52% { opacity: 0.95; }
+  60%, 100% { opacity: 0; }
+}
+
+@keyframes flashBlack {
+  0%, 40% { opacity: 0; }
+  48%, 52% { opacity: 0.95; }
+  60%, 100% { opacity: 0; }
+}
+
+@keyframes zoomInLoop {
+  0%, 20% { opacity: 0; transform: scale(0.6); }
+  45%, 75% { opacity: 1; transform: scale(1); }
+  95%, 100% { opacity: 0; transform: scale(1.3); }
+}
+
+@keyframes zoomOutLoop {
+  0%, 20% { opacity: 0; transform: scale(1.4); }
+  45%, 75% { opacity: 1; transform: scale(1); }
+  95%, 100% { opacity: 0; transform: scale(0.7); }
+}
+
+@keyframes slideLeftLoop {
+  0%, 20% { transform: translateX(100%); }
+  45%, 75% { transform: translateX(0%); }
+  95%, 100% { transform: translateX(-100%); }
+}
+
+@keyframes slideRightLoop {
+  0%, 20% { transform: translateX(-100%); }
+  45%, 75% { transform: translateX(0%); }
+  95%, 100% { transform: translateX(100%); }
+}
+
+@keyframes blurFadeLoop {
+  0%, 20% { opacity: 0; filter: blur(6px); }
+  45%, 75% { opacity: 1; filter: blur(0px); }
+  95%, 100% { opacity: 0; filter: blur(6px); }
+}
+
+@keyframes glitchLoop {
+  0%, 20% { opacity: 0; transform: translate(0); }
+  45% { opacity: 1; transform: translate(-2px, 1px); filter: hue-rotate(90deg); }
+  50% { opacity: 1; transform: translate(2px, -1px); filter: hue-rotate(180deg); }
+  75% { opacity: 1; transform: translate(0); filter: hue-rotate(0deg); }
+  95%, 100% { opacity: 0; transform: translate(0); }
+}

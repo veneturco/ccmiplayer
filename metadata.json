@@ -1,0 +1,7 @@
+{
+  "name": "CCMI - Estudio de Voz en Off & Producción",
+  "description": "Estudio de producción audiovisual y locución en off profesional con IA (gemini-3.8-flash-tts) para CCMI / CSMI, con sincronización de escenas y línea de tiempo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
