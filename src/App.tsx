@@ -11,6 +11,8 @@ import { VoiceSettings } from './components/VoiceSettings';
 import { SceneList } from './components/SceneList';
 import { CapCutPanel } from './components/CapCutPanel';
 import { AudioHub } from './components/AudioHub';
+import { InspectorPro } from './components/InspectorPro';
+import { GeminiStudioEngine } from './components/GeminiStudioEngine';
 import { MobileCapCutStudio } from './components/MobileCapCutStudio';
 import { DirectorModal } from './components/DirectorModal';
 import { ExportModal } from './components/ExportModal';
@@ -112,8 +114,8 @@ export default function App() {
   // Device Mode: Desktop vs Mobile (Requested by user)
   const [deviceMode, setDeviceMode] = useState<DeviceMode>('desktop');
 
-  // Active navigation tab (includes dedicated 'audio' tab for TTS & Audio Import)
-  const [activeTab, setActiveTab] = useState<'capcut' | 'audio' | 'scenes' | 'voice'>('capcut');
+  // Active navigation tab (includes dedicated 'audio', 'inspector' & 'gemini' tabs)
+  const [activeTab, setActiveTab] = useState<'capcut' | 'audio' | 'scenes' | 'voice' | 'inspector' | 'gemini'>('capcut');
 
   const [selectedOverlayId, setSelectedOverlayId] = useState<string | null>(null);
 
@@ -1225,7 +1227,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950">
+    <div className="min-h-screen bg-surface text-on-surface flex flex-col font-sans selection:bg-primary-container selection:text-slate-950">
       {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-6 right-6 z-50 animate-bounce">
@@ -1408,16 +1410,16 @@ export default function App() {
               />
 
               {/* Status Bar & Quick Actions */}
-              <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
+              <div className="bg-surface-container-low border border-outline-variant/30 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs text-on-surface-variant font-mono">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <Sparkles className="w-4 h-4 text-primary shrink-0" />
                   <span>
                     Audio:{' '}
                     <strong className="text-white">
                       {customAudioName ? `Importado (${customAudioName})` : `gemini-3.8-flash-tts (${selectedVoice})`}
                     </strong>{' '}
                     • {mediaClips.length} clips en secuencia • Subtítulos:{' '}
-                    <strong className={subtitleConfig.enabled ? 'text-emerald-400' : 'text-slate-500'}>
+                    <strong className={subtitleConfig.enabled ? 'text-secondary-fixed' : 'text-slate-500'}>
                       {subtitleConfig.enabled ? 'ACTIVADOS' : 'DESACTIVADOS'}
                     </strong>
                   </span>
@@ -1426,7 +1428,7 @@ export default function App() {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setActiveTab('audio')}
-                    className="text-cyan-400 hover:text-cyan-300 font-bold underline flex items-center gap-1"
+                    className="text-primary hover:text-primary-fixed font-bold underline flex items-center gap-1"
                   >
                     <Mic className="w-3.5 h-3.5" />
                     <span>Texto a Voz / Importar Audio</span>
@@ -1443,7 +1445,33 @@ export default function App() {
 
             {/* Right: Dynamic Tab Panel (5 cols) */}
             <div className="lg:col-span-5 space-y-4">
-              {/* TAB 1: AUDIO HUB (TTS & IMPORT AUDIO) - USER REQUEST */}
+              {/* TAB 1: INSPECTOR PRO (IMAGE 3 WORKSTATION DESIGN) */}
+              {activeTab === 'inspector' && (
+                <InspectorPro
+                  activeClip={mediaClips[0] || null}
+                  onUpdateClip={handleUpdateMediaClip}
+                  vocalCleanConfig={vocalCleanConfig}
+                  onApplyVocalClean={handleApplyVocalClean}
+                  isCleaningVocal={isCleaningVocal}
+                />
+              )}
+
+              {/* TAB 2: GEMINI AI STUDIO ENGINE (IMAGE 2 DESIGN) */}
+              {activeTab === 'gemini' && (
+                <GeminiStudioEngine
+                  currentScene={currentScene}
+                  selectedVoice={selectedVoice}
+                  onSelectVoice={setSelectedVoice}
+                  onAnalyzeScene={handleOpenDirector}
+                  onAutoBrollGen={handleAutoFitDuration}
+                  onInjectAudio={(audioName) => {
+                    setCustomAudioName(audioName);
+                    showToast(`Inyectado ${audioName} en la pista de audio con éxito`, 'success');
+                  }}
+                />
+              )}
+
+              {/* TAB 3: AUDIO HUB (TTS & IMPORT AUDIO) - USER REQUEST */}
               {activeTab === 'audio' && (
                 <AudioHub
                   rawScriptText={rawScriptText}

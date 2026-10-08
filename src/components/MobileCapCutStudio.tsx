@@ -11,6 +11,9 @@ import {
   CapCutTemplate, ClipTransitionType, VocalCleanConfig, VocalCleanPreset, UserPlanTier
 } from '../types';
 import { SUBTITLE_STYLES, STICKER_CATALOG, STYLE_PRESETS, StickerTemplate } from '../data/initialScript';
+import { InspectorPro } from './InspectorPro';
+import { GeminiStudioEngine } from './GeminiStudioEngine';
+import { ExportProEngine } from './ExportProEngine';
 
 interface MobileCapCutStudioProps {
   mediaClips: MediaClip[];
@@ -173,7 +176,7 @@ export const MobileCapCutStudio: React.FC<MobileCapCutStudioProps> = ({
 }) => {
   // Mobile active drawer
   const [activeSheet, setActiveSheet] = useState<
-    'none' | 'tts' | 'audio-import' | 'clips' | 'subtitles' | 'filters' | 'stickers' | 'volume'
+    'none' | 'tts' | 'audio-import' | 'clips' | 'subtitles' | 'filters' | 'stickers' | 'volume' | 'inspector' | 'gemini' | 'export'
   >('none');
 
   const audioFileInputRef = useRef<HTMLInputElement | null>(null);
@@ -342,8 +345,27 @@ export const MobileCapCutStudio: React.FC<MobileCapCutStudioProps> = ({
 
       {/* Mobile Video Player Viewport */}
       <div className="p-3 flex flex-col items-center justify-center bg-black/40">
+        {/* Top HUD Telemetry Strip matching Stitch Image 4 */}
+        <div className="w-full flex items-center justify-between pb-1.5 text-[10px] font-mono">
+          <div className="flex items-center gap-1.5">
+            <span className="px-1.5 py-0.5 rounded bg-surface-container-highest border border-outline-variant/30 text-on-surface-variant font-bold">
+              REC709 · HDR10
+            </span>
+            <span className="text-primary font-bold flex items-center gap-1">
+              <span>⛶</span> GUIDES: ACTIVE
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-secondary font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+              PROG 60.00 FPS
+            </span>
+          </div>
+        </div>
+
         <div
-          className={`relative rounded-2xl overflow-hidden bg-slate-950 border-2 border-slate-800 shadow-2xl flex items-center justify-center w-full transition-all ${
+          className={`relative rounded-xl overflow-hidden bg-slate-950 border border-outline-variant/30 shadow-2xl flex items-center justify-center w-full transition-all ${
             aspectRatio === '9:16'
               ? 'aspect-[9/16] max-h-[420px]'
               : aspectRatio === '16:9'
@@ -352,6 +374,20 @@ export const MobileCapCutStudio: React.FC<MobileCapCutStudioProps> = ({
           }`}
           onClick={onTogglePlay}
         >
+          {/* Top Overlays inside monitor */}
+          <div className="absolute top-2 left-2 z-20 flex items-center gap-1.5 pointer-events-none">
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+            <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider bg-black/60 px-1.5 py-0.5 rounded border border-white/20">
+              SCENE 03_SHOT_42
+            </span>
+          </div>
+
+          <div className="absolute top-2 right-2 z-20 pointer-events-none">
+            <span className="text-[10px] font-mono font-bold text-primary bg-black/60 px-1.5 py-0.5 rounded border border-primary/30">
+              LUT: NEON_TOKYO_V4
+            </span>
+          </div>
+
           {/* Active Clip Render */}
           {activeMedia && (
             activeMedia.type === 'video' ? (
@@ -480,6 +516,32 @@ export const MobileCapCutStudio: React.FC<MobileCapCutStudioProps> = ({
           {/* Time Badge */}
           <div className="absolute bottom-2 left-2 bg-slate-950/80 backdrop-blur px-2 py-0.5 rounded text-[10px] font-mono text-cyan-300 border border-slate-800">
             {formatTime(currentTime)} / {formatTime(totalDuration)}
+          </div>
+        </div>
+
+        {/* STEREO LED DB METERS MATCHING IMAGE 4 */}
+        <div className="w-full mt-2 bg-surface-container-low p-2 rounded-lg border border-outline-variant/30 space-y-1 font-mono text-[10px]">
+          <div className="flex items-center gap-2">
+            <span className="text-on-surface-variant w-3">L</span>
+            <div className="flex-1 h-2 bg-surface-container-lowest rounded-sm overflow-hidden flex gap-0.5">
+              <div className="h-full bg-emerald-400 rounded-xs" style={{ width: '68%' }} />
+              <div className="h-full bg-cyan-400/40 rounded-xs flex-1" />
+            </div>
+            <span className="text-on-surface-variant w-7 text-right">-3.2</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-on-surface-variant w-3">R</span>
+            <div className="flex-1 h-2 bg-surface-container-lowest rounded-sm overflow-hidden flex gap-0.5">
+              <div className="h-full bg-emerald-400 rounded-xs" style={{ width: '64%' }} />
+              <div className="h-full bg-cyan-400/40 rounded-xs flex-1" />
+            </div>
+            <span className="text-on-surface-variant w-7 text-right">-4.8</span>
+          </div>
+
+          <div className="flex justify-between items-center pt-0.5 text-[9px] text-on-surface-variant border-t border-outline-variant/20">
+            <span>TRUE PEAK COMPLIANCE</span>
+            <span className="text-secondary font-bold">-3.2 dB</span>
           </div>
         </div>
       </div>
@@ -633,61 +695,41 @@ export const MobileCapCutStudio: React.FC<MobileCapCutStudioProps> = ({
           </button>
         )}
 
-        {/* CapCut Quick Actions Bar on Mobile (Dividir, Cortar Izq, Cortar Der, Filmstrip, Duplicar) */}
-        <div className="grid grid-cols-5 gap-1 pt-0.5">
+        {/* Actions bar matching Stitch Image 4: Split S, Delete Del, Trim, Ripple R */}
+        <div className="grid grid-cols-4 gap-1.5 pt-1 font-mono text-[11px]">
           <button
             onClick={() => onSplitClip && onSplitClip(activeMedia?.id)}
-            className="py-1.5 px-1 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/60 font-black text-[10px] flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow"
-            title="Dividir clip en el cabezal"
+            className="py-1.5 px-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-white border border-outline-variant/40 font-bold flex items-center justify-center gap-1 active:scale-95 shadow"
           >
-            <Split className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Dividir</span>
+            <Split className="w-3.5 h-3.5 text-primary" />
+            <span>Split</span>
+            <span className="text-[9px] text-on-surface-variant bg-surface-container-lowest px-1 rounded">S</span>
           </button>
 
           <button
-            onClick={() => onTrimLeft && onTrimLeft(activeMedia?.id)}
-            className="py-1.5 px-1 rounded-xl bg-yellow-950/80 hover:bg-yellow-900 text-yellow-300 border border-yellow-700/60 font-black text-[10px] flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow"
-            title="Cortar inicio hasta el cabezal"
+            onClick={() => activeMedia && onDeleteMediaClip(activeMedia.id)}
+            className="py-1.5 px-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-rose-300 border border-outline-variant/40 font-bold flex items-center justify-center gap-1 active:scale-95 shadow"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-yellow-400" />
-            <span>Cortar In</span>
+            <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+            <span>Delete</span>
+            <span className="text-[9px] text-on-surface-variant bg-surface-container-lowest px-1 rounded">Del</span>
           </button>
 
           <button
-            onClick={() => onTrimRight && onTrimRight(activeMedia?.id)}
-            className="py-1.5 px-1 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/60 font-black text-[10px] flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow"
-            title="Cortar fin desde el cabezal"
+            onClick={() => activeMedia && onOpenTrimModal(activeMedia.id)}
+            className="py-1.5 px-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-white border border-outline-variant/40 font-bold flex items-center justify-center gap-1 active:scale-95 shadow"
           >
-            <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Cortar Out</span>
+            <Scissors className="w-3.5 h-3.5 text-secondary" />
+            <span>Trim</span>
           </button>
 
-          {activeMedia && activeMedia.type === 'video' ? (
-            <button
-              onClick={() => onOpenTrimModal(activeMedia.id)}
-              className="py-1.5 px-1 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-700/60 font-black text-[10px] flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow"
-              title="Editor Filmstrip CapCut"
-            >
-              <Scissors className="w-3.5 h-3.5 text-rose-400" />
-              <span>Recortar</span>
-            </button>
-          ) : (
-            <button
-              onClick={() => setActiveSheet('clips')}
-              className="py-1.5 px-1 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-700/60 font-black text-[10px] flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow"
-            >
-              <Film className="w-3.5 h-3.5 text-rose-400" />
-              <span>Clips</span>
-            </button>
-          )}
-
           <button
-            onClick={() => onDuplicateClip && activeMedia && onDuplicateClip(activeMedia.id)}
-            className="py-1.5 px-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-black text-[10px] flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow"
-            title="Duplicar clip para extraer otro pedazo"
+            onClick={() => onAutoSyncCuts && onAutoSyncCuts()}
+            className="py-1.5 px-2 rounded-lg bg-primary-container text-slate-950 font-black flex items-center justify-center gap-1 active:scale-95 shadow"
           >
-            <Copy className="w-3.5 h-3.5 text-slate-400" />
-            <span>Duplicar</span>
+            <RefreshCw className="w-3.5 h-3.5 text-slate-950" />
+            <span>Ripple</span>
+            <span className="text-[9px] bg-slate-950/20 px-1 rounded">R</span>
           </button>
         </div>
 
@@ -717,31 +759,53 @@ export const MobileCapCutStudio: React.FC<MobileCapCutStudioProps> = ({
         </div>
       </div>
 
-      {/* Quick Action Cards (Very visible on phone!) */}
-      <div className="p-3 grid grid-cols-2 gap-2">
-        <button
-          onClick={() => setActiveSheet('tts')}
-          className="p-3 rounded-xl bg-gradient-to-br from-cyan-950/70 to-slate-900 border border-cyan-500/40 text-left space-y-1 active:scale-[0.98] transition shadow-md"
-        >
-          <div className="flex items-center justify-between text-cyan-400">
-            <Mic className="w-5 h-5" />
-            <Sparkles className="w-3.5 h-3.5" />
+      {/* INSPECTOR MINI-DOCK MATCHING IMAGE 4 BOTTOM SECTION */}
+      <div className="px-3 pb-2">
+        <div className="bg-surface-container-low border border-outline-variant/30 rounded-xl p-3 space-y-2.5 font-mono text-xs">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-white font-bold">
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              <span className="truncate max-w-[200px]">INSPECTOR: {activeMedia?.name || 'HERO_CYBERPUNK_SCENE_03'}</span>
+            </div>
+            <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-500/30">
+              AUTO-COLOR ON
+            </span>
           </div>
-          <div className="font-black text-xs text-white">Escribir Texto a Voz</div>
-          <div className="text-[10px] text-slate-400">Genera narración con IA</div>
-        </button>
 
-        <button
-          onClick={() => audioFileInputRef.current?.click()}
-          className="p-3 rounded-xl bg-gradient-to-br from-emerald-950/70 to-slate-900 border border-emerald-500/40 text-left space-y-1 active:scale-[0.98] transition shadow-md"
-        >
-          <div className="flex items-center justify-between text-emerald-400">
-            <Upload className="w-5 h-5" />
-            <FileAudio className="w-3.5 h-3.5" />
+          <div className="grid grid-cols-2 gap-2 text-[10px]">
+            <div className="bg-surface-container-highest p-2 rounded flex items-center justify-between">
+              <div>
+                <span className="text-on-surface-variant block text-[9px]">SCALE</span>
+                <span className="text-white font-bold">{Math.round((activeMedia?.scale || 1) * 100)}%</span>
+              </div>
+              <span className="text-primary text-[9px]">SCRUB ↻</span>
+            </div>
+
+            <div className="bg-surface-container-highest p-2 rounded flex items-center justify-between">
+              <div>
+                <span className="text-on-surface-variant block text-[9px]">POS (X, Y)</span>
+                <span className="text-white font-bold">0, 0</span>
+              </div>
+              <span className="text-secondary text-[9px]">PX ⛶</span>
+            </div>
+
+            <div className="bg-surface-container-highest p-2 rounded flex items-center justify-between">
+              <div>
+                <span className="text-on-surface-variant block text-[9px]">OPACITY</span>
+                <span className="text-white font-bold">100%</span>
+              </div>
+              <span className="text-on-surface-variant text-[9px]">NORMAL ◒</span>
+            </div>
+
+            <div className="bg-surface-container-highest p-2 rounded flex items-center justify-between">
+              <div>
+                <span className="text-on-surface-variant block text-[9px]">SPEED</span>
+                <span className="text-primary font-bold">1.00x</span>
+              </div>
+              <span className="text-primary text-[9px]">OPTICAL ⚡</span>
+            </div>
           </div>
-          <div className="font-black text-xs text-white">Importar Audio</div>
-          <div className="text-[10px] text-slate-400">Sube MP3, WAV o notas de voz</div>
-        </button>
+        </div>
       </div>
 
       {/* Mini Sequence of Media Clips on Mobile */}
@@ -777,74 +841,61 @@ export const MobileCapCutStudio: React.FC<MobileCapCutStudioProps> = ({
         </div>
       </div>
 
-      {/* Bottom Sticky CapCut Mobile Dock Toolbar */}
-      <div className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-slate-900 border-t border-slate-800 z-30 px-1 py-1.5 flex items-center justify-around text-slate-400 shadow-2xl">
+      {/* Bottom Sticky CapCut Mobile Dock Toolbar (Matching Stitch 5-Screen System) */}
+      <div className="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-surface-container-low border-t border-outline-variant/30 z-30 px-2 py-2 flex items-center justify-around text-on-surface-variant shadow-2xl font-mono text-[10px]">
+        {/* 1. Timeline */}
         <button
-          onClick={() => setActiveSheet('tts')}
-          className={`flex flex-col items-center gap-0.5 text-[10px] font-bold px-1.5 py-1 rounded-lg transition ${
-            activeSheet === 'tts' ? 'text-cyan-400 bg-cyan-950/40' : 'hover:text-white'
+          onClick={() => setActiveSheet('none')}
+          className={`flex flex-col items-center gap-1 transition ${
+            activeSheet === 'none' ? 'text-primary font-bold' : 'hover:text-white'
           }`}
         >
-          <Mic className="w-4 h-4 text-cyan-400" />
-          <span>Voz IA</span>
+          <Layers className="w-5 h-5 text-current" />
+          <span>Timeline</span>
         </button>
 
-        <button
-          onClick={() => setActiveSheet('audio-import')}
-          className={`flex flex-col items-center gap-0.5 text-[10px] font-bold px-1.5 py-1 rounded-lg transition ${
-            activeSheet === 'audio-import' ? 'text-emerald-400 bg-emerald-950/40' : 'hover:text-white'
-          }`}
-        >
-          <Upload className="w-4 h-4 text-emerald-400" />
-          <span>Audio</span>
-        </button>
-
+        {/* 2. Assets */}
         <button
           onClick={() => setActiveSheet('clips')}
-          className={`flex flex-col items-center gap-0.5 text-[10px] font-bold px-1.5 py-1 rounded-lg transition ${
-            activeSheet === 'clips' ? 'text-rose-400 bg-rose-950/40' : 'hover:text-white'
+          className={`flex flex-col items-center gap-1 transition ${
+            activeSheet === 'clips' ? 'text-primary font-bold' : 'hover:text-white'
           }`}
         >
-          <Film className="w-4 h-4 text-rose-400" />
-          <span>Clips</span>
+          <Film className="w-5 h-5 text-current" />
+          <span>Assets</span>
         </button>
 
-        {/* Volumen button in bottom toolbar - PROMINENTLY POSITIONED */}
+        {/* 3. Inspector */}
         <button
-          onClick={() => setActiveSheet('volume')}
-          className={`flex flex-col items-center gap-0.5 text-[10px] font-black px-2 py-1 rounded-lg transition ${
-            activeSheet === 'volume'
-              ? 'text-yellow-300 bg-yellow-950/60 border border-yellow-500/40 shadow'
-              : 'text-yellow-400 hover:text-white'
+          onClick={() => setActiveSheet('inspector')}
+          className={`flex flex-col items-center gap-1 transition ${
+            activeSheet === 'inspector' ? 'text-primary font-bold' : 'hover:text-white'
           }`}
-          title="Ajustar volumen y sonido"
         >
-          {isMuted || volume === 0 ? (
-            <VolumeX className="w-4 h-4 text-rose-400" />
-          ) : (
-            <Volume2 className="w-4 h-4 text-yellow-400" />
-          )}
-          <span>Volumen</span>
+          <Sliders className="w-5 h-5 text-current" />
+          <span>Inspector</span>
         </button>
 
+        {/* 4. Gemini AI */}
         <button
-          onClick={() => setActiveSheet('subtitles')}
-          className={`flex flex-col items-center gap-0.5 text-[10px] font-bold px-1.5 py-1 rounded-lg transition ${
-            activeSheet === 'subtitles' ? 'text-amber-400 bg-amber-950/40' : 'hover:text-white'
+          onClick={() => setActiveSheet('gemini')}
+          className={`flex flex-col items-center gap-1 transition ${
+            activeSheet === 'gemini' ? 'text-primary font-bold' : 'hover:text-white'
           }`}
         >
-          <Type className="w-4 h-4" />
-          <span>Subtítulos</span>
+          <Sparkles className="w-5 h-5 text-current" />
+          <span>Gemini AI</span>
         </button>
 
+        {/* 5. Export Pro */}
         <button
-          onClick={() => setActiveSheet('filters')}
-          className={`flex flex-col items-center gap-0.5 text-[10px] font-bold px-1.5 py-1 rounded-lg transition ${
-            activeSheet === 'filters' ? 'text-teal-400 bg-teal-950/40' : 'hover:text-white'
+          onClick={() => setActiveSheet('export')}
+          className={`flex flex-col items-center gap-1 transition ${
+            activeSheet === 'export' ? 'text-primary font-bold' : 'hover:text-white'
           }`}
         >
-          <Palette className="w-4 h-4" />
-          <span>Filtros</span>
+          <Download className="w-5 h-5 text-current" />
+          <span>Export Pro</span>
         </button>
       </div>
 
@@ -1304,6 +1355,47 @@ export const MobileCapCutStudio: React.FC<MobileCapCutStudioProps> = ({
                     </div>
                   )}
                 </div>
+              </div>
+            )}
+
+            {/* SHEET: INSPECTOR PRO (IMAGE 3) */}
+            {activeSheet === 'inspector' && (
+              <div className="space-y-3 pb-2">
+                <InspectorPro
+                  activeClip={activeMedia || null}
+                  onUpdateClip={onUpdateMediaClip}
+                  vocalCleanConfig={vocalCleanConfig}
+                  onApplyVocalClean={onApplyVocalClean}
+                  isCleaningVocal={isCleaningVocal}
+                />
+              </div>
+            )}
+
+            {/* SHEET: GEMINI AI STUDIO (IMAGE 2) */}
+            {activeSheet === 'gemini' && (
+              <div className="space-y-3 pb-2">
+                <GeminiStudioEngine
+                  currentScene={currentScene}
+                  selectedVoice={selectedVoice}
+                  onSelectVoice={onSelectVoice}
+                  onAnalyzeScene={onGenerateAudio}
+                  onAutoBrollGen={onLoadOfficialScript}
+                  onInjectAudio={(audioName) => {
+                    setActiveSheet('none');
+                  }}
+                />
+              </div>
+            )}
+
+            {/* SHEET: EXPORT PRO MASTER (IMAGE 1) */}
+            {activeSheet === 'export' && (
+              <div className="space-y-3 pb-2">
+                <ExportProEngine
+                  onStartRender={(res) => onExportVideo()}
+                  isRendering={isExportingVideo}
+                  renderProgress={exportProgress}
+                  onAbort={() => setActiveSheet('none')}
+                />
               </div>
             )}
 

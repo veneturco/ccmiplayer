@@ -18,8 +18,8 @@ interface HeaderProps {
   onToggleBgMusic: () => void;
   hasAudio: boolean;
   customAudioName: string | null;
-  activeTab: 'capcut' | 'audio' | 'scenes' | 'voice';
-  onSelectTab: (tab: 'capcut' | 'audio' | 'scenes' | 'voice') => void;
+  activeTab: 'capcut' | 'audio' | 'scenes' | 'voice' | 'inspector' | 'gemini';
+  onSelectTab: (tab: 'capcut' | 'audio' | 'scenes' | 'voice' | 'inspector' | 'gemini') => void;
   deviceMode: DeviceMode;
   onToggleDeviceMode: (mode: DeviceMode) => void;
   volume?: number;
@@ -138,10 +138,36 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <span className="material-symbols-outlined text-base">movie</span>
-              <span>Editor CapCut</span>
+              <span>Timeline Master</span>
             </button>
 
-            {/* 2. TEXTO A VOZ & AUDIO - CRUCIAL USER REQUEST */}
+            {/* 2. INSPECTOR PRO & COLOR / DSP */}
+            <button
+              onClick={() => onSelectTab('inspector')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 ${
+                activeTab === 'inspector'
+                  ? 'bg-primary-container text-slate-950 shadow-md font-extrabold'
+                  : 'text-on-surface-variant hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined text-base">tune</span>
+              <span>Inspector Pro</span>
+            </button>
+
+            {/* 3. GEMINI AI STUDIO ENGINE */}
+            <button
+              onClick={() => onSelectTab('gemini')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap shrink-0 ${
+                activeTab === 'gemini'
+                  ? 'bg-gradient-to-r from-indigo-500 to-primary text-white shadow-md font-extrabold'
+                  : 'text-on-surface-variant hover:text-white'
+              }`}
+            >
+              <span className="material-symbols-outlined text-base">auto_awesome</span>
+              <span>Gemini AI Studio</span>
+            </button>
+
+            {/* 4. TEXTO A VOZ & AUDIO */}
             <button
               onClick={() => onSelectTab('audio')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition whitespace-nowrap shrink-0 relative ${
@@ -151,7 +177,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <span className="material-symbols-outlined text-base">graphic_eq</span>
-              <span>Texto a Voz (IA) & DSP</span>
+              <span>Vocal Clean & DSP</span>
               <span className={`w-2 h-2 rounded-full ${hasAudio ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
             </button>
 

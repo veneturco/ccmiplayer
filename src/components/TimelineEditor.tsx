@@ -362,13 +362,13 @@ export const TimelineEditor: React.FC<TimelineEditorProps> = ({
             </div>
           </div>
 
-          {/* Aguja Playhead */}
+          {/* Aguja Playhead (Stitch Electric Cyan Needle) */}
           <div
             className="absolute top-0 bottom-0 pointer-events-none z-30 flex flex-col items-center transition-[left] duration-75"
             style={{ left: `${playheadPercent}%` }}
           >
-            <div className="w-3.5 h-3.5 bg-rose-500 rotate-45 -mt-1 shadow-md shadow-rose-500/50" />
-            <div className="w-0.5 h-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.9)]" />
+            <div className="w-3.5 h-3.5 bg-primary rotate-45 -mt-1 shadow-md shadow-primary/60 border border-slate-950" />
+            <div className="w-0.5 h-full bg-primary shadow-[0_0_12px_rgba(0,229,255,0.9)]" />
           </div>
         </div>
       </div>

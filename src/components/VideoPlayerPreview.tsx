@@ -612,10 +612,10 @@ export const VideoPlayerPreview: React.FC<VideoPlayerPreviewProps> = ({
       </div>
 
       {/* Scrubber & Player Controls Bar */}
-      <div className="p-4 bg-slate-900 border-t border-slate-800 space-y-3">
+      <div className="p-4 bg-surface-container-low border-t border-outline-variant/30 space-y-3">
         {/* Scrubber */}
         <div
-          className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden cursor-pointer relative group"
+          className="w-full h-2.5 bg-surface-container-highest rounded-full overflow-hidden cursor-pointer relative group"
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
