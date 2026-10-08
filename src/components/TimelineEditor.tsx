@@ -162,48 +162,62 @@ export const TimelineEditor: React.FC<TimelineEditorProps> = ({
           </h3>
         </div>
 
-        {/* Acciones de Edición Rápidas */}
-        <div className="flex items-center gap-1.5 bg-slate-950 px-2 py-1 rounded-xl border border-slate-800 text-xs">
+        {/* Acciones de Edición Rápidas - Stitch Image 4 Toolbar */}
+        <div className="flex items-center gap-1.5 bg-[#141920] px-2 py-1 rounded-lg border border-[#232936] text-xs">
           {/* Toggle Imantación */}
           <button
             type="button"
             onClick={() => setIsSnappingEnabled(!isSnappingEnabled)}
-            className={`p-1.5 rounded-lg font-bold transition active:scale-95 shadow-sm text-[11px] ${
+            className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono font-bold tracking-wider transition ${
               isSnappingEnabled
-                ? 'bg-cyan-900/50 text-cyan-400 border border-cyan-700/60'
-                : 'text-slate-500 hover:text-slate-400'
+                ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/40'
+                : 'text-slate-500 hover:text-slate-300'
             }`}
-            title="Imantación Magnética de Cabezal"
+            title="Snap to playhead/cuts"
           >
-            <Magnet className="w-3.5 h-3.5" />
+            <Magnet className="w-3 h-3" />
+            <span className="hidden sm:inline">SNAP: {isSnappingEnabled ? 'ON' : 'OFF'}</span>
           </button>
+
+          <div className="h-4 w-px bg-slate-800 mx-0.5" />
 
           <button
             type="button"
             onClick={() => onSplitClip && onSplitClip()}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/60 font-bold transition active:scale-95 shadow-sm text-[11px]"
-            title="Dividir clip (Atajo: S)"
+            className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#1c232e] hover:bg-cyan-950/60 text-slate-200 hover:text-cyan-300 border border-[#2a3444] font-medium transition active:scale-95 text-[11px]"
+            title="Split Clip at Playhead (S)"
           >
             <Split className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden sm:inline">Dividir (S)</span>
+            <span>Split <kbd className="text-[9px] bg-black/40 px-1 rounded text-slate-400">S</kbd></span>
           </button>
+
           <button
             type="button"
             onClick={() => onTrimLeft && onTrimLeft()}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-yellow-950/80 hover:bg-yellow-900 text-yellow-300 border border-yellow-700/60 font-bold transition active:scale-95 shadow-sm text-[11px]"
-            title="Cortar inicio"
+            className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#1c232e] hover:bg-red-950/60 text-slate-200 hover:text-red-300 border border-[#2a3444] font-medium transition active:scale-95 text-[11px]"
+            title="Delete Selected Clip (Del)"
           >
-            <ArrowLeft className="w-3 h-3 text-yellow-400" />
-            <span className="hidden sm:inline">Cortar In</span>
+            <Trash2 className="w-3.5 h-3.5 text-red-400" />
+            <span>Delete <kbd className="text-[9px] bg-black/40 px-1 rounded text-slate-400">Del</kbd></span>
           </button>
+
           <button
             type="button"
             onClick={() => onTrimRight && onTrimRight()}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-700/60 font-bold transition active:scale-95 shadow-sm text-[11px]"
-            title="Cortar fin"
+            className="flex items-center gap-1 px-2 py-1 rounded bg-[#1c232e] hover:bg-slate-700/60 text-slate-300 border border-[#2a3444] font-medium transition active:scale-95 text-[11px]"
+            title="Trim In/Out"
           >
-            <ArrowRight className="w-3 h-3 text-emerald-400" />
-            <span className="hidden sm:inline">Cortar Out</span>
+            <Scissors className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Trim</span>
+          </button>
+
+          <button
+            type="button"
+            className="flex items-center gap-1 px-2 py-1 rounded bg-[#1c232e] hover:bg-slate-700/60 text-slate-300 border border-[#2a3444] font-medium transition active:scale-95 text-[11px]"
+            title="Ripple Edit (R)"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden sm:inline">Ripple <kbd className="text-[9px] bg-black/40 px-1 rounded text-slate-400">R</kbd></span>
           </button>
         </div>
       </div>

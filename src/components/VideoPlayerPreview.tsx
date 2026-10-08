@@ -241,7 +241,26 @@ export const VideoPlayerPreview: React.FC<VideoPlayerPreviewProps> = ({
   };
 
   return (
-    <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+    <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl overflow-hidden shadow-2xl flex flex-col font-sans">
+      {/* Top HUD Telemetry Strip matching Image 4 */}
+      <div className="px-4 py-2 bg-surface-container-low border-b border-outline-variant/30 flex items-center justify-between text-[11px] font-mono select-none">
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-0.5 rounded bg-surface-container-highest border border-outline-variant/40 text-on-surface-variant font-bold text-[10px]">
+            REC709 · HDR10
+          </span>
+          <span className="text-primary font-bold flex items-center gap-1">
+            <span>⛶</span> GUIDES: ACTIVE
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-secondary font-bold flex items-center gap-1.5 text-[10px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+            PROG 60.00 FPS
+          </span>
+        </div>
+      </div>
+
       {/* Visual Monitor Canvas */}
       <div
         ref={containerRef}
@@ -249,6 +268,19 @@ export const VideoPlayerPreview: React.FC<VideoPlayerPreviewProps> = ({
         onPointerUp={handlePointerUp}
         className={`relative ${aspectClass} bg-slate-950 overflow-hidden select-none transition-all duration-300 group`}
       >
+        {/* Top Overlays inside monitor */}
+        <div className="absolute top-2.5 left-3 z-30 flex items-center gap-2 pointer-events-none">
+          <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+          <span className="text-[11px] font-mono font-bold text-white uppercase tracking-wider bg-black/70 backdrop-blur px-2 py-0.5 rounded border border-white/20">
+            SCENE 03_SHOT_42
+          </span>
+        </div>
+
+        <div className="absolute top-2.5 right-3 z-30 pointer-events-none">
+          <span className="text-[11px] font-mono font-bold text-primary bg-black/70 backdrop-blur px-2 py-0.5 rounded border border-primary/40">
+            LUT: NEON_TOKYO_V4
+          </span>
+        </div>
         {/* Active Media Clip (Image or Video) with No-Zoom Support */}
         {activeClip.type === 'video' ? (
           <div className="absolute inset-0 w-full h-full flex items-center justify-center">
@@ -609,6 +641,32 @@ export const VideoPlayerPreview: React.FC<VideoPlayerPreviewProps> = ({
             <Play className="w-7 h-7 fill-slate-950 ml-1" />
           </button>
         )}
+      </div>
+
+      {/* STEREO LED DB METERS MATCHING IMAGE 4 */}
+      <div className="px-4 py-2 bg-surface-container-low border-t border-outline-variant/30 space-y-1 font-mono text-[10px]">
+        <div className="flex items-center gap-2">
+          <span className="text-on-surface-variant w-3 font-bold">L</span>
+          <div className="flex-1 h-2 bg-surface-container-lowest rounded-sm overflow-hidden flex gap-0.5 border border-outline-variant/20">
+            <div className="h-full bg-emerald-400 rounded-xs" style={{ width: '68%' }} />
+            <div className="h-full bg-cyan-400/30 rounded-xs flex-1" />
+          </div>
+          <span className="text-on-surface-variant w-8 text-right font-bold">-3.2</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-on-surface-variant w-3 font-bold">R</span>
+          <div className="flex-1 h-2 bg-surface-container-lowest rounded-sm overflow-hidden flex gap-0.5 border border-outline-variant/20">
+            <div className="h-full bg-emerald-400 rounded-xs" style={{ width: '64%' }} />
+            <div className="h-full bg-cyan-400/30 rounded-xs flex-1" />
+          </div>
+          <span className="text-on-surface-variant w-8 text-right font-bold">-4.8</span>
+        </div>
+
+        <div className="flex justify-between items-center pt-0.5 text-[9px] text-on-surface-variant border-t border-outline-variant/20">
+          <span>TRUE PEAK COMPLIANCE</span>
+          <span className="text-secondary font-bold">-3.2 dB</span>
+        </div>
       </div>
 
       {/* Scrubber & Player Controls Bar */}
