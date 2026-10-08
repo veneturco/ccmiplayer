@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Layers, Music, Mic, Film, Image, Split, ArrowLeft, ArrowRight, Magnet, Scissors } from 'lucide-react';
+import { Layers, Music, Mic, Film, Image, Split, ArrowLeft, ArrowRight, Magnet, Scissors, Trash2, Sparkles } from 'lucide-react';
 import { ScriptScene, MediaClip, UserPlanTier } from '../types';
 import { useEditorShortcuts } from '../hooks/useEditorShortcuts';
 
